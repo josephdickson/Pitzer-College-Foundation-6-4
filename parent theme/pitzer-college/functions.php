@@ -156,3 +156,93 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
 
+/* Pitzer College Theme includes */
+/**
+ * Custom Walker to extend functionality
+ */
+require get_template_directory() . '/inc/custom_nav.php';
+
+/**
+ * Enqueue scripts and styles.
+ */
+function foundation_6_parent_scripts() { 
+
+	wp_enqueue_style( 'foundation-style',  get_template_directory_uri() . '/css/foundation.min.css' );
+    
+	wp_enqueue_style( 'foundation-6-parent-style', get_template_directory_uri() . '/style.css' );
+
+	wp_enqueue_style( 'google-web-font-eb-garamond', 'https://fonts.googleapis.com/css?family=EB+Garamond' );
+
+	wp_enqueue_style( 'foundation-app-style', get_template_directory_uri() . '/css/app.css' );
+    
+	wp_enqueue_script( 'foundation-6-parent-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20120206', true );
+
+	wp_enqueue_script( 'foundation-6-parent-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20130115', true );
+
+	wp_enqueue_script( 'foundation-jquery', get_template_directory_uri() . '/js/vendor/jquery.js', array(), '20151221', false );
+
+	wp_enqueue_script( 'foundation-js', get_template_directory_uri() . '/js/foundation.js', array(), '20151221', true );
+
+	wp_enqueue_script( 'app-js', get_template_directory_uri() . '/js/app.js', array(), '20151221', true );
+
+	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
+		wp_enqueue_script( 'comment-reply' );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'foundation_6_parent_scripts' );
+
+/**
+ * A fallback when no navigation is selected by default, otherwise it throws some nasty errors in your face.
+ */
+
+function foundation_menu_fallback() {
+	echo '<div class="alert-box navigation">';
+	// Translators 1: Link to Menus, 2: Link to Customize
+  	printf( __( 'Please assign a menu to %1$s or %2$s the design.', 'foundation' ),
+  		sprintf(  __( '<a href="%s">Menus</a>', 'foundation' ),
+  			get_admin_url( get_current_blog_id(), 'nav-menus.php' )
+  		),
+  		sprintf(  __( '<a href="%s">Customize</a>', 'foundation' ),
+  			get_admin_url( get_current_blog_id(), 'customize.php' )
+  		)
+  	);
+  	echo '</div>';
+}
+
+
+/* Foundation Shortcodes */
+require get_template_directory() . '/inc/foundation-shortcodes/foundation-shortcodes.php';
+
+/**
+ * Disable the emoji's
+ * https://wordpress.org/plugins/disable-emojis/
+ * See Plugin for GPL License and readme.txt version 1.5.1
+ */
+
+require get_template_directory() . '/inc/disable-emojis.php';
+
+/**
+ * The following Requires the Advanced Custom Fields plugin to display
+ * Visit http://advancedcustomfields.com/ for more information
+ */
+
+/* Social Networks */
+require get_template_directory() . '/inc/social-networks.php';
+
+/* Options Page - Requires Advanced Custom Fields */
+require get_template_directory() . '/inc/options-page.php';
+
+/* Flexible Content - Requires Advanced Custom Fields */
+require get_template_directory() . '/inc/flexible-content.php';
+
+/* Google Search - Requires WP Google Search https://wordpress.org/plugins/wp-google-search/ */
+require get_template_directory() . '/inc/google-search.php';
+
+
+/**
+ * Registers an editor stylesheet for the theme.
+ */
+function wpdocs_theme_add_editor_styles() {
+    add_editor_style( 'custom-editor-style.css' );
+}
+add_action( 'admin_init', 'wpdocs_theme_add_editor_styles' );
